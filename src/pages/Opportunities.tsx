@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -117,37 +116,38 @@ const Opportunities = () => {
   const [selectedIndustry, setSelectedIndustry] = useState<string | undefined>(undefined);
 
   const types = ["funding", "training", "job", "competition"];
-  
   const locations = [...new Set(opportunities.map(opp => opp.location))];
-  
   const industries = [...new Set(opportunities.flatMap(opp => opp.industries))].filter(
     industry => industry !== "All Industries"
   );
 
-  // Apply filters to opportunities
+  const filtersDialogRef = React.useRef<HTMLDialogElement | null>(null);
+
   const filteredOpportunities = opportunities.filter(opportunity => {
-    // Search term filter
-    if (searchTerm && !opportunity.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        !opportunity.description.toLowerCase().includes(searchTerm.toLowerCase())) {
+    if (
+      searchTerm &&
+      !opportunity.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !opportunity.description.toLowerCase().includes(searchTerm.toLowerCase())
+    ) {
       return false;
     }
-    
-    // Type filter
+
     if (selectedType && opportunity.type !== selectedType) {
       return false;
     }
-    
-    // Location filter
+
     if (selectedLocation && opportunity.location !== selectedLocation) {
       return false;
     }
-    
-    // Industry filter
-    if (selectedIndustry && !opportunity.industries.includes(selectedIndustry) && 
-        !opportunity.industries.includes("All Industries")) {
+
+    if (
+      selectedIndustry &&
+      !opportunity.industries.includes(selectedIndustry) &&
+      !opportunity.industries.includes("All Industries")
+    ) {
       return false;
     }
-    
+
     return true;
   });
 
@@ -206,7 +206,6 @@ const Opportunities = () => {
             Discover funding, training, jobs, and competitions for Kenyan entrepreneurs.
           </p>
 
-          {/* Search and Filters */}
           <div className="bg-white p-4 rounded-lg shadow-sm border mb-8">
             <div className="flex flex-col md:flex-row gap-4 mb-4">
               <div className="flex-1 relative">
@@ -220,18 +219,18 @@ const Opportunities = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2 md:gap-4">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="flex items-center gap-2"
-                  onClick={() => document.getElementById('filtersDialog')?.showModal()}
+                  onClick={() => filtersDialogRef.current?.showModal()}
                 >
                   <Filter size={16} />
                   <span>Filters</span>
                 </Button>
-                
+
                 {(selectedType || selectedLocation || selectedIndustry) && (
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     className="text-gray-500"
                     onClick={resetFilters}
                   >
@@ -241,7 +240,6 @@ const Opportunities = () => {
               </div>
             </div>
 
-            {/* Applied filters */}
             {(selectedType || selectedLocation || selectedIndustry) && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {selectedType && (
@@ -272,11 +270,14 @@ const Opportunities = () => {
             )}
           </div>
 
-          {/* Filters Dialog for Mobile */}
-          <dialog id="filtersDialog" className="modal modal-bottom sm:modal-middle p-4 md:p-0 rounded-lg">
+          <dialog
+            id="filtersDialog"
+            ref={filtersDialogRef}
+            className="modal modal-bottom sm:modal-middle p-4 md:p-0 rounded-lg"
+          >
             <div className="bg-white p-6 rounded-lg max-w-md w-full">
               <h3 className="font-bold text-lg mb-4">Filter Opportunities</h3>
-              
+
               <div className="space-y-4">
                 <div>
                   <label className="font-medium text-sm">Opportunity Type</label>
@@ -299,7 +300,7 @@ const Opportunities = () => {
                 </div>
 
                 <div>
-                  <label className="font-medium text-sm">Location</label>
+                  <label className="font-medium text-sm">Location (Region)</label>
                   <Select
                     value={selectedLocation}
                     onValueChange={setSelectedLocation}
@@ -338,18 +339,14 @@ const Opportunities = () => {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="flex justify-end gap-2 mt-6">
-                <Button variant="outline" onClick={() => {
-                  document.getElementById('filtersDialog')?.close();
-                }}>
+                <Button variant="outline" onClick={() => { filtersDialogRef.current?.close(); }}>
                   Cancel
                 </Button>
-                <Button 
+                <Button
                   className="bg-kenya-green hover:bg-kenya-green/90"
-                  onClick={() => {
-                    document.getElementById('filtersDialog')?.close();
-                  }}
+                  onClick={() => { filtersDialogRef.current?.close(); }}
                 >
                   Apply Filters
                 </Button>
@@ -357,7 +354,6 @@ const Opportunities = () => {
             </div>
           </dialog>
 
-          {/* Results */}
           <div className="grid md:grid-cols-2 gap-6">
             {filteredOpportunities.length > 0 ? (
               filteredOpportunities.map((opportunity) => (
@@ -367,7 +363,13 @@ const Opportunities = () => {
                       <Badge className={`${getTypeColor(opportunity.type)} capitalize`}>
                         <div className="flex items-center gap-1">
                           {getTypeIcon(opportunity.type)}
-                          <span>{opportunity.type}</span>
+                          <span>
+                            {
+                              opportunity.type === "funding"
+                                ? "Grant"
+                                : opportunity.type.charAt(0).toUpperCase() + opportunity.type.slice(1)
+                            }
+                          </span>
                         </div>
                       </Badge>
                     </div>
@@ -376,10 +378,8 @@ const Opportunities = () => {
                       <span>{opportunity.organization}</span>
                     </div>
                   </CardHeader>
-                  
                   <CardContent className="pb-2">
                     <p className="text-gray-600 text-sm mb-4">{opportunity.description}</p>
-                    
                     <div className="flex flex-col space-y-2 text-sm">
                       <div className="flex items-center gap-2">
                         <MapPin size={16} className="text-gray-500" />
@@ -390,7 +390,6 @@ const Opportunities = () => {
                         <span>Deadline: {formatDate(opportunity.deadline)}</span>
                       </div>
                     </div>
-                    
                     <div className="flex flex-wrap gap-1 mt-3">
                       {opportunity.industries.map((industry) => (
                         <Badge key={industry} variant="outline" className="bg-gray-50">
@@ -399,11 +398,15 @@ const Opportunities = () => {
                       ))}
                     </div>
                   </CardContent>
-                  
                   <CardFooter className="pt-2">
                     <Button asChild className="w-full bg-kenya-green hover:bg-kenya-green/90">
-                      <a href={opportunity.url} target="_blank" rel="noopener noreferrer">
-                        View Details
+                      <a
+                        href={opportunity.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium underline underline-offset-2"
+                      >
+                        Learn more
                       </a>
                     </Button>
                   </CardFooter>
@@ -414,11 +417,17 @@ const Opportunities = () => {
                 <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                   <Search size={24} className="text-gray-400" />
                 </div>
-                <h3 className="text-lg font-medium mb-1">No opportunities found</h3>
-                <p className="text-gray-500 mb-4">Try adjusting your search or filters</p>
-                <Button variant="outline" onClick={resetFilters}>
-                  Reset Filters
-                </Button>
+                <h3 className="text-lg font-medium mb-1">Coming soon!</h3>
+                <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                  We’re working hard to bring new opportunities for young Kenyan entrepreneurs.
+                  Sign up below to be the first to know when new opportunities are available!
+                </p>
+                <form className="flex flex-col sm:flex-row gap-3 justify-center items-center max-w-sm mx-auto">
+                  <Input type="email" placeholder="Your email" required />
+                  <Button type="submit" className="bg-kenya-green hover:bg-kenya-green/90 w-full sm:w-auto">
+                    Sign up for updates
+                  </Button>
+                </form>
               </div>
             )}
           </div>
