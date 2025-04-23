@@ -16,6 +16,7 @@ interface Opportunity {
   industries: string[];
   description: string;
   url: string;
+  imageUrl: string;
 }
 
 const opportunities: Opportunity[] = [
@@ -28,7 +29,8 @@ const opportunities: Opportunity[] = [
     deadline: "2025-05-30",
     industries: ["All Industries"],
     description: "Low-interest loans from KSh 50,000 to KSh 5 million for youth-owned businesses. Applications accepted year-round.",
-    url: "#"
+    url: "#",
+    imageUrl: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=600&q=80"
   },
   {
     id: "2",
@@ -39,7 +41,8 @@ const opportunities: Opportunity[] = [
     deadline: "2025-05-15",
     industries: ["Technology", "Digital Marketing"],
     description: "Free 8-week intensive training on digital skills including web development, digital marketing, and data analysis.",
-    url: "#"
+    url: "#",
+    imageUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80"
   },
   {
     id: "3",
@@ -50,7 +53,8 @@ const opportunities: Opportunity[] = [
     deadline: "2025-05-10",
     industries: ["E-commerce", "Retail"],
     description: "Full-time position for an E-Commerce Manager to oversee online retail operations and strategy.",
-    url: "#"
+    url: "#",
+    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80"
   },
   {
     id: "4",
@@ -61,7 +65,8 @@ const opportunities: Opportunity[] = [
     deadline: "2025-06-15",
     industries: ["All Industries"],
     description: "Competition for entrepreneurs aged 15-22 with cash prizes up to $25,000 and business development support.",
-    url: "#"
+    url: "#",
+    imageUrl: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=600&q=80"
   },
   {
     id: "5",
@@ -72,7 +77,8 @@ const opportunities: Opportunity[] = [
     deadline: "2025-05-25",
     industries: ["Agriculture", "Food Production"],
     description: "Competition for innovative agribusiness solutions with grants up to KSh 2 million for winners.",
-    url: "#"
+    url: "#",
+    imageUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80"
   },
   {
     id: "6",
@@ -83,7 +89,8 @@ const opportunities: Opportunity[] = [
     deadline: "2025-06-01",
     industries: ["Technology", "Fintech"],
     description: "12-week incubation program for women-led tech startups with mentorship, resources, and funding opportunities.",
-    url: "#"
+    url: "#",
+    imageUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80"
   },
   {
     id: "7",
@@ -94,7 +101,8 @@ const opportunities: Opportunity[] = [
     deadline: "2025-05-18",
     industries: ["Marketing", "Technology"],
     description: "Part-time position for a creative Social Media Specialist to manage brand presence across platforms.",
-    url: "#"
+    url: "#",
+    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80"
   },
   {
     id: "8",
@@ -105,7 +113,8 @@ const opportunities: Opportunity[] = [
     deadline: "2025-07-01",
     industries: ["All Industries"],
     description: "$5,000 seed capital, business training, and mentorship for entrepreneurs across Africa.",
-    url: "#"
+    url: "#",
+    imageUrl: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=600&q=80"
   },
 ];
 
@@ -358,6 +367,15 @@ const Opportunities = () => {
             {filteredOpportunities.length > 0 ? (
               filteredOpportunities.map((opportunity) => (
                 <Card key={opportunity.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="h-52 w-full overflow-hidden relative">
+                    <img
+                      src={opportunity.imageUrl}
+                      alt={opportunity.title}
+                      className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+                  </div>
                   <CardHeader className="pb-2">
                     <div className="flex justify-between items-start">
                       <Badge className={`${getTypeColor(opportunity.type)} capitalize`}>
