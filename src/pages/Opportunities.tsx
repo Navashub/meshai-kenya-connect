@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -419,7 +419,7 @@ const Opportunities = () => {
                 </div>
                 <h3 className="text-lg font-medium mb-1">Coming soon!</h3>
                 <p className="text-gray-500 mb-6 max-w-md mx-auto">
-                  We’re working hard to bring new opportunities for young Kenyan entrepreneurs.
+                  We're working hard to bring new opportunities for young Kenyan entrepreneurs.
                   Sign up below to be the first to know when new opportunities are available!
                 </p>
                 <form className="flex flex-col sm:flex-row gap-3 justify-center items-center max-w-sm mx-auto">
